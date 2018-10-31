@@ -23,8 +23,7 @@ edat_files = strcat(edat_dir,'/',{d.name}');
 
 % Logging
 fprintf('%s %s %s\n',project,subject,session);
-fprintf('   %s ',edat_files)
-fprintf('\n')
+fprintf('   %s\n',edat_files{:})
 
 % Now parse the files and save trial info
 for e = 1:length(edat_files)

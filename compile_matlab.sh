@@ -8,7 +8,7 @@
 #
 # Need to -a add some local non-code files that the compiler won't find on its own:
 #    report.fig
-mcc -m -v src/fmri_conncalc.m \
+mcc -m -v src/ndw_wm_edat.m \
 -a src/report.fig \
 -d bin
 
