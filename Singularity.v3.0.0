@@ -2,38 +2,14 @@ Bootstrap: docker
 From: ubuntu:16.04
 
 %help
-NDW_WM_EDAT_v2
-Computes d prime, accuracy, reaction time for NDW working memory study.
 
-TO BUILD
-  sudo singularity build NDW_WM_EDAT_v2.simg Singularity
-
-TO RUN
-  singularity run --cleanenv -B INPUTS:/INPUTS,OUTPUTS:/OUTPUTS NDW_WM_EDAT_v2.simg \
-    /INPUTS /OUTPUTS
-
-INPUTS
-In the bound INPUTS directory, place the EDAT_CONVERTED resources from all usable
-"Working Memory" scans in the session. These are assumed to end in '.txt' and it
-should be fine to use the existing filenames. All '.txt' files in the INPUTS 
-directory will be assumed to be EDAT files.
-
-Also, place files in the INPUTS directory named 'project', 'subject', 'session', 
-each containing the corresponding information. (Note - if you'd rather pass
-these on the singularity command line, I can make that happen)
-
-OUTPUTS
-report.pdf,PDF
-summary.csv,STATS
-trialinfo.csv,TRIALINFO
+Computes d prime, accuracy, reaction time for NDW working memory study. See associated YAML for inputs and outputs.
 
 
 %files
-  # Build from masimatlab/trunk/xnatspiders/matlab/NDW_wm_edat_v2 for this to work 
-  . /code
+  bin /matlab_bin
 
 %labels
-  Name NDW_WM_EDAT_v2
   Maintainer baxter.rogers@vanderbilt.edu
 
 %post
@@ -59,9 +35,8 @@ trialinfo.csv,TRIALINFO
   export LD_LIBRARY_PATH XAPPLRESDIR
 
 %runscript
-  cd /code && \
     xvfb-run --server-num=$(($$ + 99)) \
     --server-args='-screen 0 1600x1200x24 -ac +extension GLX' \
-    ./run_NDW_WM_EDAT_v2.sh \
+    /matlab_bin/run_ndw_wm_edat.sh \
     /usr/local/MATLAB/MATLAB_Runtime/v92 \
     "$@"

@@ -1,22 +1,30 @@
-function ndw_wm_edat(in_dir,out_dir)
+function ndw_wm_edat(varargin)
 
 warning('off','MATLAB:table:ModifiedVarnames')
 
-% Get inputs from INPUTS directory
-d = dir([in_dir '/*.txt']);
-edat_files = strcat(in_dir,'/',{d.name}');
+%% Parse inputs
+P = inputParser;
+addOptional(P,'edat_dir','/INPUTS/edats');
+addOptional(P,'project','UNK_PROJ');
+addOptional(P,'subject','UNK_SUBJ');
+addOptional(P,'session','UNK_SESS');
+addOptional(P,'out_dir','/OUTPUTS');
+parse(P,varargin{:});
 
-fid = fopen([in_dir '/project'],'rt');
-project = fscanf(fid,'%s',[1 1]);
-fclose(fid);
+out_dir = P.Results.out_dir;
+edat_dir = P.Results.edat_dir;
+project = P.Results.project;
+subject = P.Results.subject;
+session = P.Results.session;
 
-fid = fopen([in_dir '/subject'],'rt');
-subject = fscanf(fid,'%s',[1 1]);
-fclose(fid);
+% Get edat filenames
+d = dir([edat_dir '/*.txt']);
+edat_files = strcat(edat_dir,'/',{d.name}');
 
-fid = fopen([in_dir '/session'],'rt');
-session = fscanf(fid,'%s',[1 1]);
-fclose(fid);
+% Logging
+fprintf('%s %s %s\n',project,subject,session);
+fprintf('   %s ',edat_files)
+fprintf('\n')
 
 % Now parse the files and save trial info
 for e = 1:length(edat_files)
