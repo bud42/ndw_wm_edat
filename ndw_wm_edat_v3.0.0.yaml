@@ -8,11 +8,17 @@ inputs:
   default:
     container_path: baxpr-ndw_wm_edat-master-v3.0.0.simg
     container_source: shub://baxpr/ndw_wm_edat:v3.0.0
-    extraflags: ""
   xnat:
     scans:
-      help: no_clue
-
+      - name: scan_wm
+        types: Working Memory
+        select: all
+        resources:
+          - resource: EDAT_CONVERTED
+            varname: edat
+            ftype: FILE
+            fdest: edat.txt
+ 
     attrs:
       - varname: project
         object: session
@@ -38,10 +44,11 @@ outputs:
 command: >-
   singularity
   run
+  -e -c
   --bind $INDIR:/INPUTS
   --bind $OUTDIR:/OUTPUTS
   {container_path}
-  edat_dir /INPUTS/edats
+  edat_dir /INPUTS
   project {project}
   subject {subject}
   session {session}
